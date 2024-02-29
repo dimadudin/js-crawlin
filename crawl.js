@@ -30,6 +30,24 @@ function getURLsfromHTML(htmlBody, baseURL) {
     return urls
 }
 
+async function crawlPage(currentURL) {
+    console.log(`crawling ${currentURL}`)
+    try {
+        const response = await fetch(currentURL);
+        if (response.status >= 400) {
+            console.log(`error in response with status code: ${response.status} on page: ${currentURL}`)
+            return
+        }
+        const ctype = response.headers.get('content-type')
+        if (!ctype.includes('text/html')) {
+            console.log(`non html response with content type: ${ctype} on page: ${currentURL}`)
+            return
+        }
+        console.log(await response.text())
+    } catch (err) {
+        console.log(err.message)
+    }
+}
 module.exports = {
-    normalizeURL, getURLsfromHTML
+    normalizeURL, getURLsfromHTML, crawlPage
 }
