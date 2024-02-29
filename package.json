@@ -1,0 +1,23 @@
+{
+    "name": "js-crawlin",
+    "version": "1.0.0",
+    "description": "",
+    "main": "main.js",
+    "scripts": {
+        "start": "node main.js",
+        "test": "jest"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+ssh://git@github.com/dimadudin/js-crawlin.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/dimadudin/js-crawlin/issues"
+    },
+    "homepage": "https://github.com/dimadudin/js-crawlin#readme",
+    "devDependencies": {
+        "jest": "^29.7.0"
+    }
+}
