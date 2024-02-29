@@ -30,24 +30,45 @@ function getURLsfromHTML(htmlBody, baseURL) {
     return urls
 }
 
-async function crawlPage(currentURL) {
+async function crawlPage(baseURL, currentURL, pages) {
+    const baseURLObj = new URL(baseURL)
+    const currentURLObj = new URL(currentURL)
+    if (baseURLObj.hostname != currentURLObj.hostname) {
+        return pages
+    }
+    const normalizedBaseURL = normalizeURL(baseURL)
+    const normalizedCurrentURL = normalizeURL(currentURL)
+    if (pages.hasOwnProperty(normalizedCurrentURL)) {
+        pages[normalizedCurrentURL]++
+        return pages
+    }
+    if (normalizedBaseURL === normalizedCurrentURL) {
+        pages[normalizedCurrentURL] = 0
+    } else {
+        pages[normalizedCurrentURL] = 1
+    }
     console.log(`crawling ${currentURL}`)
     try {
         const response = await fetch(currentURL);
         if (response.status >= 400) {
             console.log(`error in response with status code: ${response.status} on page: ${currentURL}`)
-            return
+            return pages
         }
         const ctype = response.headers.get('content-type')
         if (!ctype.includes('text/html')) {
             console.log(`non html response with content type: ${ctype} on page: ${currentURL}`)
-            return
+            return pages
         }
-        console.log(await response.text())
+        const urls = getURLsfromHTML(await response.text(), baseURL)
+        for (const url of urls) {
+            pages = await crawlPage(baseURL, url, pages)
+        }
+        return pages
     } catch (err) {
         console.log(err.message)
     }
 }
+
 module.exports = {
     normalizeURL, getURLsfromHTML, crawlPage
 }

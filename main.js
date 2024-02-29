@@ -12,7 +12,7 @@ function main() {
     }
     const baseURL = argv[2]
     console.log(`Initiating __C.R.A.W.L.__ at ${baseURL}`)
-    crawlPage(baseURL)
+    pages = crawlPage(baseURL, baseURL, {})
 }
 
 main()
